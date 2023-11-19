@@ -22,7 +22,7 @@ import Comp_code.Lift;
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
 
-@Autonomous(name="Red_Back", group="Auto")
+@Autonomous(name="Red_PARK", group="Auto")
 public class Back_RED extends LinearOpMode {
     OpenCvCamera webcam;
     Lift lift;
@@ -106,7 +106,7 @@ public class Back_RED extends LinearOpMode {
             case LEFT:
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
-                lift.moveToTarget(Lift.LiftPos.LOW);
+                //lift.moveToTarget(Lift.LiftPos.LOW);
                 drive.followTrajectory(middle_park);
                 break;
             case NOT_FOUND:
