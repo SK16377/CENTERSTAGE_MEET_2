@@ -36,16 +36,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
         ElapsedTime toggleTimer = new ElapsedTime();
         //double toggleTime = .25;
 
-        public PIDController controller;
-        public static double p = 0.005, i = 0, d = 0.0; // d = dampener (dampens arm movement and is scary). ignore i
-        public static double f = .002;  // prevents arm from falling from gravity
 
-
-        public static int LiftTarget = 0; // target position
-
-        public static int START_POS = 0;
-        public static int LOW = 2100; //1208 = LOW
-        public static int MID = 2530; //2078 = MID
         // public static int HIGH = 500; //2900 = HIGH
 //        public ElapsedTime runtime = new ElapsedTime();
         double waitTime1 = .5;
@@ -81,7 +72,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
         public void runOpMode() throws InterruptedException {
 
             robot.init(hardwareMap);
-            Lift lift = new Lift(hardwareMap);
+            Lift lift = new Lift(hardwareMap, telemetry);
 
             robot.wrist.setPosition(0.99);
             robot.raxon.setPosition(.89);
@@ -95,7 +86,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
             elbowUpState outtake = elbowUpState.START;
             elbowDownState intake = elbowDownState.START;
 
-            LiftTarget = 0;
+            Lift.LiftPos liftTarget = Lift.LiftPos.START;
 
             while (opModeIsActive() && !isStopRequested()) {
 
@@ -191,18 +182,15 @@ import com.arcrobotics.ftclib.controller.PIDController;
                 }
                 //lift
                 if (gamepad2.dpad_down) {
-                    //lift_speed = 0.2;
-                    // lift_speed = 1;
-                    LiftTarget = LOW;
+
+                    liftTarget = Lift.LiftPos.LOW;
                 }
-                else if (gamepad2.dpad_right) {
-                    LiftTarget = MID;
-                }
-                else if (gamepad2.dpad_left) {
-                    LiftTarget = MID;
+
+                else if (gamepad2.dpad_left || gamepad2.dpad_right) {
+                    liftTarget = Lift.LiftPos.MID;
                 }
                 if (gamepad2.cross) {
-                    LiftTarget = 0;
+                    liftTarget = Lift.LiftPos.START;
                 }
 
 
@@ -241,7 +229,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
                     }
 
 
-                lift.update();
+                lift.update(liftTarget);
                 telemetry.update();
                 robot.wheel.setPosition(servospeed);
             }
@@ -250,57 +238,6 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
         //}
 
-        class Lift {
-            public Lift(HardwareMap hardwareMap) {
-                // Beep boop this is the the constructor for the lift
-                // Assume this sets up the lift hardware
 
-                controller = new PIDController(p, i, d);
-                telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
-                larm = hardwareMap.get(DcMotorEx.class,"Llift");
-                rarm = hardwareMap.get(DcMotorEx.class,"Rlift");
-
-
-                larm.setDirection(DcMotorEx.Direction.FORWARD);
-                rarm.setDirection(DcMotorEx.Direction.REVERSE);
-
-                larm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                larm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rarm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
-
-            public void update() {
-                // Beep boop this is the lift update function
-                // Assume this runs some PID controller for the lift
-
-                controller.setPID(p, i, d);
-
-                int larmPos = larm.getCurrentPosition();
-                int rarmPos = rarm.getCurrentPosition();
-
-                double Lpid = controller.calculate(larmPos, LiftTarget);
-                double Rpid = controller.calculate(rarmPos, LiftTarget);
-
-                // double Lff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; //* (12/voltageSensor.getVoltage()
-                // double Rff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; // * (12/voltageSensor.getVoltage()
-
-                double Lpower = Lpid + f;
-                double Rpower = Rpid + f;
-
-                larm.setPower(Lpower);
-                rarm.setPower(Rpower);
-
-//            telemetry.addData("Lpos", larmPos);
-//            telemetry.addData("Rpos", rarmPos);
-//            telemetry.addData("Ltarget", LiftTarget);
-//            telemetry.addData("Rtarget", LiftTarget);
-                // telemetry.addData("cone", cone);
-                //telemetry.addData("SSVar", SSVar);
-                telemetry.update();
-            }
-        }
 
     }

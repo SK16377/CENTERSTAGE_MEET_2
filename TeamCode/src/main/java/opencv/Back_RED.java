@@ -5,12 +5,16 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import Comp_code.Lift;
 
 //import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -18,9 +22,10 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
 
-@Autonomous(name="centerstage auto", group="Auto")
+@Autonomous(name="Red_Back", group="Auto")
 public class Back_RED extends LinearOpMode {
     OpenCvCamera webcam;
+    Lift lift;
     public enum START_POSITION{
         BLUE_LEFT,
         BLUE_RIGHT,
@@ -30,9 +35,8 @@ public class Back_RED extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
+        lift = new Lift(hardwareMap, telemetry);
         int cameraMonitorViewId = hardwareMap.appContext
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
@@ -102,6 +106,7 @@ public class Back_RED extends LinearOpMode {
             case LEFT:
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
+                lift.moveToTarget(Lift.LiftPos.LOW);
                 drive.followTrajectory(middle_park);
                 break;
             case NOT_FOUND:
@@ -116,6 +121,8 @@ public class Back_RED extends LinearOpMode {
                 drive.followTrajectory(right_park);
                 break;
         }
+
+
 
 
 
