@@ -1,4 +1,4 @@
-package opencv;
+package Comp_code;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -13,6 +13,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import Comp_code.Lift;
+import Comp_code.bot_map;
+import opencv.detector_2_ranges;
 
 //import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -72,8 +74,11 @@ public class Drop_RED extends LinearOpMode {
                 .build();
 
 
-        Trajectory backup_middle = drive.trajectoryBuilder(right.end())
-                .back(20)
+        Trajectory backup_middle = drive.trajectoryBuilder(middle.end())
+                .back(2)
+                .build();
+        Trajectory drop_middle = drive.trajectoryBuilder(backup_middle.end())
+                .lineToLinearHeading(new Pose2d(44.86, -40.63, Math.toRadians(0.00)))
                 .build();
 
         Trajectory backup_right = drive.trajectoryBuilder(right.end())
@@ -104,8 +109,9 @@ public class Drop_RED extends LinearOpMode {
             case LEFT: //middle
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
+                drive.followTrajectory(drop_middle);
                 //lift.moveToTarget(Lift.LiftPos.LOW);
-                drive.followTrajectory(middle_park);
+                //drive.followTrajectory(middle_park);
                 break;
             case NOT_FOUND: //left
                 drive.followTrajectory(left);

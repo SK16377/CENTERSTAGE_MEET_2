@@ -1,4 +1,4 @@
-package opencv;
+package Comp_code;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -10,11 +10,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import Comp_code.Lift;
+import Comp_code.bot_map;
+import opencv.detector_2_ranges;
 
 //import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -72,7 +75,6 @@ public class Back_RED extends LinearOpMode {
         Trajectory left = drive.trajectoryBuilder(startPose)
                 .splineTo(new Vector2d(8.93, -39.13), Math.toRadians(140.00))
                 .build();
-
 
         Trajectory backup_middle = drive.trajectoryBuilder(right.end())
                 .back(20)
