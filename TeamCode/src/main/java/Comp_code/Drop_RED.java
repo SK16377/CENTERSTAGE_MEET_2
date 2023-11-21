@@ -24,8 +24,10 @@ import opencv.detector_2_ranges;
 
 @Autonomous(name="Red_DROP", group="Auto")
 public class Drop_RED extends LinearOpMode {
+    SampleMecanumDrive drive;
     OpenCvCamera webcam;
     Lift lift;
+    Arm arm;
     public enum START_POSITION{
         BLUE_LEFT,
         BLUE_RIGHT,
@@ -35,8 +37,9 @@ public class Drop_RED extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
         lift = new Lift(hardwareMap, telemetry);
+        arm = new Arm(hardwareMap, telemetry);
         int cameraMonitorViewId = hardwareMap.appContext
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
@@ -78,50 +81,74 @@ public class Drop_RED extends LinearOpMode {
                 .back(2)
                 .build();
         Trajectory drop_middle = drive.trajectoryBuilder(backup_middle.end())
-                .lineToLinearHeading(new Pose2d(44.86, -40.63, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(44.24, -39.75, Math.toRadians(0.00)))
                 .build();
-
+        Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
+                .forward(6.6)
+                .build();
+        Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
+                .back(6)
+                .build();
+        Trajectory middle_park = drive.trajectoryBuilder(away_middle.end())
+                .strafeRight(24)
+                .build();
         Trajectory backup_right = drive.trajectoryBuilder(right.end())
-                .back(10)
-                .build();
-        Trajectory middle_park = drive.trajectoryBuilder(backup_middle.end())
-                .strafeRight(25)
-                .build();
-        Trajectory right_park = drive.trajectoryBuilder(backup_right.end())
-                .strafeRight(20)
-                .build();
-        Trajectory backup_left = drive.trajectoryBuilder(left.end())
-                .back(30)
+                .back(3)
                 .build();
 
-        Trajectory left_strafe = drive.trajectoryBuilder(backup_left.end())
-                .strafeRight(6)
+        Trajectory right_drop = drive.trajectoryBuilder(backup_right.end())
+                .lineToLinearHeading(new Pose2d(44.24, -44.09, Math.toRadians(0.00)))
                 .build();
-        Trajectory left_park = drive.trajectoryBuilder(left_strafe.end())
-                .back(9)
+        Trajectory deposit_right = drive.trajectoryBuilder(right_drop.end())
+                .forward(6.6)
+                .build();
+        Trajectory away_right = drive.trajectoryBuilder(deposit_right.end())
+                .back(6)
+                .build();
+        Trajectory right_park = drive.trajectoryBuilder(away_right.end())
+                .strafeRight(15)
+                .build();
+
+        Trajectory backup_left = drive.trajectoryBuilder(left.end())
+                .back(5)
+                .build();
+        Trajectory left_drop = drive.trajectoryBuilder(backup_left.end())
+                .lineToLinearHeading(new Pose2d(44.24, -32.09, Math.toRadians(0.00)))
+                .build();
+
+        Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
+                .forward(6.6)
+                .build();
+        Trajectory away_left = drive.trajectoryBuilder(deposit_left.end())
+                .back(6)
+                .build();
+        Trajectory left_park = drive.trajectoryBuilder(away_left.end())
+                .strafeRight(30)
                 .build();
 
         waitForStart();
         if (isStopRequested()) return;
-
-
-        switch (detector.getLocation()) {
+          detector_2_ranges.Location location = detector.getLocation();
+        switch (location) {
             case LEFT: //middle
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
                 drive.followTrajectory(drop_middle);
-                //lift.moveToTarget(Lift.LiftPos.LOW);
-                //drive.followTrajectory(middle_park);
+                scoreLow();
+                drive.followTrajectory(middle_park);
                 break;
             case NOT_FOUND: //left
                 drive.followTrajectory(left);
                 drive.followTrajectory(backup_left);
-                drive.followTrajectory(left_strafe);
+                drive.followTrajectory(left_drop);
+                scoreLow();
                 drive.followTrajectory(left_park);
                 break;
             case RIGHT: //right
                 drive.followTrajectory(right);
                 drive.followTrajectory(backup_right);
+                drive.followTrajectory(right_drop);
+                scoreLow();
                 drive.followTrajectory(right_park);
                 break;
         }
@@ -129,9 +156,24 @@ public class Drop_RED extends LinearOpMode {
 
 
 
-
-
         webcam.stopStreaming();
+    }
+    public void scoreLow(){
+        Trajectory backdrop = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .forward(6.6)
+                .build();
+        Trajectory away = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .back(6)
+                .build();
+
+        arm.goToScoringPos();
+        lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
+        drive.followTrajectory(backdrop);
+        arm.deposit(.6);
+        drive.followTrajectory(away);
+        arm.intakePos();
+        lift.moveToTarget(Lift.LiftPos.START);
+
     }
 }
 

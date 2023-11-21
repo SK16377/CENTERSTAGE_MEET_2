@@ -20,11 +20,12 @@ public class Lift {
     public enum LiftPos{
         START,
         LOW,
-        MID
+        MID, LOW_AUTO
     }
     public static int START_POS = 0;
     public static int LOW_POS = 2100; //1208 = LOW
     public static int MID_POS = 2530; //2078 = MID
+    public static int LOW_AUTO = 1650; //2078 = MID
 
     private MultipleTelemetry tl;
     public DcMotorEx larm;
@@ -107,6 +108,10 @@ public class Lift {
 
             case MID:
                 encoderTarget = MID_POS;
+                break;
+
+            case LOW_AUTO:
+                encoderTarget = LOW_AUTO;
                 break;
         }
 
