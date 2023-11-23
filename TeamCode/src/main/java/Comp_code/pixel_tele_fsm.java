@@ -145,7 +145,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
                     //robot.wheel.setPower(0);
                     robot.wheel.setPosition(.5);
                 }
-                if(gamepad1.cross){
+                if(gamepad1.circle){
                     runtime.reset();
                     while(runtime.seconds() <= .5){
                         robot.wheel.setPosition(.1);
@@ -175,10 +175,15 @@ import com.arcrobotics.ftclib.controller.PIDController;
                 }
 
                 if (gamepad1.square) {
-                    robot.wrist.setPosition(.99);
+
                 }
-                else if (gamepad1.circle) {
-                    robot.wrist.setPosition(.3);
+                else if (gamepad1.cross) {
+                    runtime.reset();
+                    while(runtime.seconds() <= 1){
+                        robot.wheel.setPosition(.1);
+                    }
+                    robot.wheel.setPosition(.5);
+                    runtime.reset();
                 }
                 //lift
                 if (gamepad2.dpad_down) {

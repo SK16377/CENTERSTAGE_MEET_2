@@ -29,11 +29,11 @@ public class CenterstageDetector extends OpenCvPipeline {
 
     private Location location = Location.LEFT;
     static final Rect LEFT_ROI = new Rect(
-            new Point(65, 80),
-            new Point(135, 160));
+            new Point(30, 80),
+            new Point(100, 160));
     static final Rect RIGHT_ROI = new Rect(
-            new Point(200, 85),
-            new Point(290, 150));
+            new Point(170, 85),
+            new Point(260, 150));
     static double PERCENT_COLOR_THRESHOLD = 0.2;
 
     public CenterstageDetector(Telemetry t) { telemetry = t; }
@@ -46,8 +46,11 @@ public class CenterstageDetector extends OpenCvPipeline {
 
 //        Scalar lowHSV = new Scalar(100,100,100);
 //        Scalar highHSV = new Scalar(180,255,255);
-        Scalar lowHSV = new Scalar(90,50,70);
+        Scalar lowHSV = new Scalar(97, 74,72);
         Scalar highHSV = new Scalar(128,255,255);
+
+
+
 
         Core.inRange(mat, lowHSV, highHSV, mat);
 
@@ -70,15 +73,15 @@ public class CenterstageDetector extends OpenCvPipeline {
 
         if (stoneLeft) {
             location = Location.LEFT;
-            telemetry.addData("Cube Location", "middle");
+            telemetry.addData("Cube Location", "left");
         }
         else if (stoneRight) {
             location = Location.RIGHT;
-            telemetry.addData("Cube Location", "right");
+            telemetry.addData("Cube Location", "middle");
         }
         else {
             location = Location.NOT_FOUND;
-            telemetry.addData("Cube Location", "left");
+            telemetry.addData("Cube Location", "right");
         }
         telemetry.update();
 
