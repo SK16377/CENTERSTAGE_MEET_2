@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -22,7 +23,7 @@ import opencv.detector_2_ranges;
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
 
-@Autonomous(name="Red_DROP", group="Auto")
+@Autonomous(name="Red_BACK", group="Auto")
 public class Drop_RED extends LinearOpMode {
     SampleMecanumDrive drive;
     OpenCvCamera webcam;
@@ -84,10 +85,10 @@ public class Drop_RED extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(44.24, -39.75, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
-                .forward(6.6)
+                .forward(5)
                 .build();
         Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
-                .back(6)
+                .back(5)
                 .build();
         Trajectory middle_park = drive.trajectoryBuilder(away_middle.end())
                 .strafeRight(24)
@@ -100,10 +101,10 @@ public class Drop_RED extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(44.24, -44.09, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_right = drive.trajectoryBuilder(right_drop.end())
-                .forward(6.6)
+                .forward(5)
                 .build();
         Trajectory away_right = drive.trajectoryBuilder(deposit_right.end())
-                .back(6)
+                .back(5)
                 .build();
         Trajectory right_park = drive.trajectoryBuilder(away_right.end())
                 .strafeRight(15)
@@ -117,10 +118,10 @@ public class Drop_RED extends LinearOpMode {
                 .build();
 
         Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
-                .forward(6.6)
+                .forward(5)
                 .build();
         Trajectory away_left = drive.trajectoryBuilder(deposit_left.end())
-                .back(6)
+                .back(5)
                 .build();
         Trajectory left_park = drive.trajectoryBuilder(away_left.end())
                 .strafeRight(30)
@@ -134,21 +135,21 @@ public class Drop_RED extends LinearOpMode {
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
                 drive.followTrajectory(drop_middle);
-                scoreLow();
+                scoreLow(deposit_middle, away_middle);
                 drive.followTrajectory(middle_park);
                 break;
             case NOT_FOUND: //left
                 drive.followTrajectory(left);
                 drive.followTrajectory(backup_left);
                 drive.followTrajectory(left_drop);
-                scoreLow();
+                scoreLow(deposit_left, away_left);
                 drive.followTrajectory(left_park);
                 break;
             case RIGHT: //right
                 drive.followTrajectory(right);
                 drive.followTrajectory(backup_right);
                 drive.followTrajectory(right_drop);
-                scoreLow();
+                scoreLow(deposit_right, away_right);
                 drive.followTrajectory(right_park);
                 break;
         }
@@ -158,16 +159,13 @@ public class Drop_RED extends LinearOpMode {
 
         webcam.stopStreaming();
     }
-    public void scoreLow(){
-        Trajectory backdrop = drive.trajectoryBuilder(drive.getPoseEstimate())
-                .forward(6.6)
-                .build();
-        Trajectory away = drive.trajectoryBuilder(drive.getPoseEstimate())
-                .back(6)
-                .build();
+    public void scoreLow(Trajectory backdrop, Trajectory away){
+
+
 
         arm.goToScoringPos();
         lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
+
         drive.followTrajectory(backdrop);
         arm.deposit(.6);
         drive.followTrajectory(away);

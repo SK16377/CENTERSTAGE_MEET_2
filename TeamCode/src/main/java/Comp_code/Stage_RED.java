@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -15,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import Comp_code.Lift;
 import Comp_code.bot_map;
 import opencv.CenterstageDetector;
-import opencv.detector_2_ranges;
+import opencv.redAudiencePipeline;
 
 //import com.acmerobotics.roadrunner.geometry.Pose2d;
 
@@ -23,8 +24,8 @@ import opencv.detector_2_ranges;
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
 
-@Autonomous(name="BLUE_BACK", group="Auto")
-public class Drop_BLUE extends LinearOpMode {
+@Autonomous(name="Red_STACK", group="Auto")
+public class Stage_RED extends LinearOpMode {
     SampleMecanumDrive drive;
     OpenCvCamera webcam;
     Lift lift;
@@ -45,7 +46,7 @@ public class Drop_BLUE extends LinearOpMode {
                 .getResources().getIdentifier("cameraMonitorViewId",
                         "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        CenterstageDetector detector = new CenterstageDetector(telemetry);
+       redAudiencePipeline detector = new redAudiencePipeline(telemetry);
         //START_POSITION position = new CenterstageDetector(telemetry);
         webcam.setPipeline(detector);
         //private detector.getLocation location = detector.getLocation().LEFT;
@@ -63,43 +64,29 @@ public class Drop_BLUE extends LinearOpMode {
 
         );
 
-        Pose2d startPose = new Pose2d(16.62, 63.42, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(-40, -63.42, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
         Trajectory left = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(21.8, 43.81), Math.toRadians(270.00))
+                .splineTo(new Vector2d(-41.8, -43.81), Math.toRadians(90))
                 .build();
 
         Trajectory middle = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(13.22, 38.31), Math.toRadians(270.00))
+                .splineTo(new Vector2d(-36.5, -39.31), Math.toRadians(90))
                 .build();
 
 
         Trajectory right = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(7.93, 39.13), Math.toRadians(230.00))
+                .splineTo(new Vector2d(-31.91, -41.77), Math.toRadians(40.00))
                 .build();
 
 
-        Trajectory backup_middle = drive.trajectoryBuilder(middle.end())
-                .back(2)
-                .build();
-        Trajectory drop_middle = drive.trajectoryBuilder(backup_middle.end())
-                .lineToLinearHeading(new Pose2d(44.24, 37.75, Math.toRadians(0.00)))
-                .build();
-        Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
-                .forward(5.3)
-                .build();
-        Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
-                .back(4.5)
-                .build();
-        Trajectory middle_park = drive.trajectoryBuilder(away_middle.end())
-                .strafeLeft(22)
-                .build();
+
         Trajectory backup_left = drive.trajectoryBuilder(left.end())
                 .back(3)
                 .build();
 
         Trajectory left_drop = drive.trajectoryBuilder(backup_left.end())
-                .lineToLinearHeading(new Pose2d(43.24, 44.09, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(-41.24, -44.09, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
                 .forward(5.2)
@@ -114,49 +101,92 @@ public class Drop_BLUE extends LinearOpMode {
         Trajectory backup_right = drive.trajectoryBuilder(left.end())
                 .back(5)
                 .build();
-        Trajectory right_drop = drive.trajectoryBuilder(backup_left.end())
-                .lineToLinearHeading(new Pose2d(44.24, 32.09, Math.toRadians(0.00)))
-                .build();
 
+
+        Trajectory right_stage = drive.trajectoryBuilder(backup_right.end())
+                .splineTo(new Vector2d(-18.76, -17.86), Math.toRadians(0.00))
+                .build();
+        Trajectory right_straight = drive.trajectoryBuilder(right_stage.end())
+                .forward(45)
+                .build();
+        Trajectory right_drop = drive.trajectoryBuilder(right_straight.end())
+                .splineTo(new Vector2d(39.17, -46.7), Math.toRadians(0.00))
+                .build();
         Trajectory deposit_right = drive.trajectoryBuilder(right_drop.end())
-                .forward(6.3)
+                .forward(6.6)
                 .build();
         Trajectory away_right = drive.trajectoryBuilder(deposit_right.end())
-                .back(3.5)
+                .back(5.8)
                 .build();
-        Trajectory right_park = drive.trajectoryBuilder(away_right.end())
+        Trajectory after_right = drive.trajectoryBuilder(away_right.end())
                 .strafeLeft(30)
                 .build();
-
+        Trajectory right_park = drive.trajectoryBuilder(after_right.end())
+                .strafeLeft(16)
+                .build();
+        Trajectory backup_middle = drive.trajectoryBuilder(middle.end())
+                .back(2)
+                .build();
+        Trajectory strafe_middle = drive.trajectoryBuilder(backup_middle.end())
+                .strafeLeft(16)
+                .build();
+        Trajectory stage_middle = drive.trajectoryBuilder(strafe_middle.end())
+                .splineTo(new Vector2d(-42.88, -13.68), Math.toRadians(0.00))
+                .build();
+        Trajectory straight_middle = drive.trajectoryBuilder(stage_middle.end())
+                .forward(55)
+                .build();
+        Trajectory drop_middle = drive.trajectoryBuilder(straight_middle.end())
+                .splineTo(new Vector2d(39.17, -40.7), Math.toRadians(0.00))
+                .build();
+        Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
+                .forward(5.3)
+                .build();
+        Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
+                .back(5.5)
+                .build();
+        Trajectory middle_after = drive.trajectoryBuilder(away_middle.end())
+                .strafeLeft(25)
+                .build();
+        Trajectory middle_park = drive.trajectoryBuilder(middle_after.end())
+                .forward(10)
+                .build();
         waitForStart();
         if (isStopRequested()) return;
-        CenterstageDetector.Location location = detector.getLocation();
+       redAudiencePipeline.Location location = detector.getLocation();
         switch (location) {
             case LEFT: //left
-                drive.followTrajectory(left);
-                drive.followTrajectory(backup_left);
-                drive.followTrajectory(left_drop);
-                scoreLow(deposit_left, away_left);
-                drive.followTrajectory(left_park);
+               // drive.followTrajectory(left);
+               // drive.followTrajectory(backup_left);
+//                drive.followTrajectory(left_drop);
+//                scoreLow(deposit_left, away_left);
+//                drive.followTrajectory(left_park);
 
                 //drive.followTrajectory(left_park);
                 break;
             case NOT_FOUND: //right
                 drive.followTrajectory(right);
                 drive.followTrajectory(backup_right);
+                drive.followTrajectory(right_stage);
+                drive.followTrajectory(right_straight);
                 drive.followTrajectory(right_drop);
                 scoreLow(deposit_right, away_right);
-                drive.followTrajectory(right_park);
+                drive.followTrajectory(after_right);
+               // drive.followTrajectory(right_park);
                 break;
             case RIGHT: //middle
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
+                drive.followTrajectory(strafe_middle);
+                drive.followTrajectory(stage_middle);
+                drive.followTrajectory(straight_middle);
                 drive.followTrajectory(drop_middle);
                 scoreLow(deposit_middle, away_middle);
-                drive.followTrajectory(middle_park);
+                drive.followTrajectory(middle_after);
+               // drive.followTrajectory(middle_park);
                 break;
-        }
 
+        }
 
 
 

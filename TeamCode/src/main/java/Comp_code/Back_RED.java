@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -24,7 +25,7 @@ import opencv.detector_2_ranges;
 
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
-
+@Disabled
 @Autonomous(name="Red_PARK", group="Auto")
 public class Back_RED extends LinearOpMode {
     OpenCvCamera webcam;
