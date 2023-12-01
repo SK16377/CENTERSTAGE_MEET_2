@@ -13,19 +13,24 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Lift {
     public PIDController controller;
     public static double p = 0.005, i = 0, d = 0.0; // d = dampener (dampens arm movement and is scary). ignore i
-    public static double f = .002;  // prevents arm from falling from gravity
+    public static double f = 0.0007;  // prevents arm from falling from gravity
 
 
 
     public enum LiftPos{
         START,
         LOW,
-        MID, LOW_AUTO
+        MID,
+        MIDHIGH,
+        LOW_AUTO,
+        HIGH
     }
     public static int START_POS = 0;
-    public static int LOW_POS = 2100; //1208 = LOW
-    public static int MID_POS = 2530; //2078 = MID
-    public static int LOW_AUTO = 1650; //2078 = MID
+    public static int LOW_POS = 1550;
+    public static int MID_POS = 2150;
+    public static int MID_HIGH_POS = 2550;
+    public static int HIGH_POS = 3100;
+    public static int LOW_AUTO = 1450;
 
     private MultipleTelemetry tl;
     public DcMotorEx larm;
@@ -108,6 +113,12 @@ public class Lift {
 
             case MID:
                 encoderTarget = MID_POS;
+                break;
+            case MIDHIGH:
+                encoderTarget = MID_HIGH_POS;
+                break;
+            case HIGH:
+                encoderTarget = HIGH_POS;
                 break;
 
             case LOW_AUTO:

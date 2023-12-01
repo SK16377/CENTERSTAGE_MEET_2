@@ -10,9 +10,10 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
-//blue
+
 @Disabled
-public class redAudiencePipeline extends OpenCvPipeline {
+public class blueAudiencePipeline extends OpenCvPipeline {
+    //red
     Telemetry telemetry;
     Mat mat = new Mat();
     public enum Location {
@@ -29,14 +30,14 @@ public class redAudiencePipeline extends OpenCvPipeline {
 
     private Location location = Location.LEFT;
     static final Rect LEFT_ROI = new Rect(
-            new Point(30, 80),
-            new Point(100, 160));
+            new Point(65, 80),
+            new Point(135, 160));
     static final Rect RIGHT_ROI = new Rect(
-            new Point(170, 85),
-            new Point(260, 150));
+            new Point(200, 85),
+            new Point(290, 150));
     static double PERCENT_COLOR_THRESHOLD = 0.2;
 
-    public redAudiencePipeline(Telemetry t) { telemetry = t; }
+    public blueAudiencePipeline(Telemetry t) { telemetry = t; }
 
     @Override
     public Mat processFrame(Mat input) {
@@ -44,15 +45,16 @@ public class redAudiencePipeline extends OpenCvPipeline {
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
         //COLOR BGR240,51,100
 
-//        Scalar lowHSV = new Scalar(100,100,100);
-//        Scalar highHSV = new Scalar(180,255,255);
-        Scalar lowHSV = new Scalar(159,50,70);
-        Scalar highHSV = new Scalar(180,255,255);
+        //red:
+//        Scalar lowHSV = new Scalar(0,100,100);
+//        Scalar highHSV = new Scalar(10,255,255);
 
-
+        Scalar lowHSV = new Scalar(97, 74,72);
+        Scalar highHSV = new Scalar(128,255,255);
 
 
         Core.inRange(mat, lowHSV, highHSV, mat);
+
 
         Mat left = mat.submat(LEFT_ROI);
         Mat right = mat.submat(RIGHT_ROI);
@@ -63,35 +65,35 @@ public class redAudiencePipeline extends OpenCvPipeline {
         left.release();
         right.release();
 
-        telemetry.addData("Left raw value", (int) Core.sumElems(left).val[0]);
+        telemetry.addData("Right raw value", (int) Core.sumElems(left).val[0]);
         telemetry.addData("Middle raw value", (int) Core.sumElems(right).val[0]);
-        telemetry.addData("Left percentage", Math.round(leftValue * 100) + "%");
-        telemetry.addData("Middle percentage", Math.round(rightValue * 100) + "%");
+        telemetry.addData("middle percentage", Math.round(leftValue * 100) + "%");
+        telemetry.addData("right percentage", Math.round(rightValue * 100) + "%");
 
         boolean stoneLeft = leftValue > PERCENT_COLOR_THRESHOLD;
         boolean stoneRight = rightValue > PERCENT_COLOR_THRESHOLD;
 
         if (stoneLeft) {
             location = Location.LEFT;
-            telemetry.addData("Cube Location", "left");
+            telemetry.addData("Cube Location", "middle");
         }
         else if (stoneRight) {
             location = Location.RIGHT;
-            telemetry.addData("Cube Location", "middle");
+            telemetry.addData("Cube Location", "right");
         }
         else {
             location = Location.NOT_FOUND;
-            telemetry.addData("Cube Location", "right");
+            telemetry.addData("Cube Location", "left");
         }
         telemetry.update();
 
         Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
 
-        Scalar red = new Scalar(255, 0, 0);
-        Scalar green = new Scalar(0, 255, 0);
+        Scalar color = new Scalar(255, 0, 0);
+        Scalar colorCenterstage = new Scalar(0, 255, 0);
 
-        Imgproc.rectangle(mat, LEFT_ROI, location == Location.LEFT? green:red);//middle
-        Imgproc.rectangle(mat, RIGHT_ROI, location == Location.RIGHT? green:red);//right
+        Imgproc.rectangle(mat, LEFT_ROI, location == Location.LEFT? colorCenterstage:color);
+        Imgproc.rectangle(mat, RIGHT_ROI, location == Location.RIGHT? colorCenterstage:color);
 
         return mat;
     }

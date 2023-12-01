@@ -77,6 +77,8 @@ public class bot_map
     public Servo wrist;
     public Servo laxon;
     public Servo claw1;
+//    public Servo rdrop;
+//    public Servo ldrop;
     public WebcamName webcam;
 //    public DcMotor rin = null;
 //    public DcMotor lin = null;
@@ -112,6 +114,8 @@ public class bot_map
         laxon = hwMap.get(Servo.class, "laxon");
         wrist = hwMap.get(Servo.class, "wrist");
         drone = hwMap.get(Servo.class, "drone");
+//        rdrop = hwMap.get(Servo.class, "rdrop");
+//        ldrop = hwMap.get(Servo.class, "ldrop");
         //claw1 = hwMap.get(Servo.class, "claw1");
 
 

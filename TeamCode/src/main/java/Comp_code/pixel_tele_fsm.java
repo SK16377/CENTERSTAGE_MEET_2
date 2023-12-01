@@ -56,6 +56,9 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
         double servospeed = 0.5;
 
+        double lDropPos = 0;
+        double rDropPos = 0;
+
         enum elbowDownState { //INTAKE
             START,
             INTAKE,
@@ -74,10 +77,12 @@ import com.arcrobotics.ftclib.controller.PIDController;
             robot.init(hardwareMap);
             Lift lift = new Lift(hardwareMap, telemetry);
 
-            robot.wrist.setPosition(0.99);
-            robot.raxon.setPosition(.89);
-            robot.laxon.setPosition(.11);
+            robot.wrist.setPosition(0.999);
 
+            robot.raxon.setPosition(.87);
+            robot.laxon.setPosition(.12);
+//            robot.ldrop.setPosition(0.214);
+//            robot.rdrop.setPosition(0.175);
 
             waitForStart();
 
@@ -92,7 +97,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
                 switch (outtake) {
                     case START:
-                        if (gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_right) {
+                        if (gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_right || gamepad2.dpad_up) {
                             //robot.grab.setPosition(CLOSE);
                             //robot.wrist.setPosition(.75);
                             waitTimer1.reset();
@@ -101,7 +106,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
                         break;
                     case OUTTAKE:
                         if(waitTimer1.seconds() >= waitTime1) {
-                            robot.wrist.setPosition(.01);
+                            robot.wrist.setPosition(.001);
                             robot.raxon.setPosition(.11);
                             robot.laxon.setPosition(.89);
                             waitTimer1.reset();
@@ -121,9 +126,9 @@ import com.arcrobotics.ftclib.controller.PIDController;
                         break;
                     case INTAKE:
                         if(waitTimer2.seconds() >= waitTime2) {
-                            robot.wrist.setPosition(.95);
-                            robot.raxon.setPosition(.88);
-                            robot.laxon.setPosition(.12);
+                            robot.wrist.setPosition(.999);
+                            robot.raxon.setPosition(.79);
+                            robot.laxon.setPosition(.21);
 
                             intake = elbowDownState.START;
                         }
@@ -147,7 +152,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
                 }
                 if(gamepad1.circle){
                     runtime.reset();
-                    while(runtime.seconds() <= .5){
+                    while(runtime.seconds() <= .7){
                         robot.wheel.setPosition(.1);
                     }
                     robot.wheel.setPosition(.5);
@@ -179,7 +184,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
                 }
                 else if (gamepad1.cross) {
                     runtime.reset();
-                    while(runtime.seconds() <= 1){
+                    while(runtime.seconds() <= 1.55){
                         robot.wheel.setPosition(.1);
                     }
                     robot.wheel.setPosition(.5);
@@ -191,16 +196,48 @@ import com.arcrobotics.ftclib.controller.PIDController;
                     liftTarget = Lift.LiftPos.LOW;
                 }
 
-                else if (gamepad2.dpad_left || gamepad2.dpad_right) {
+                else if (gamepad2.dpad_left) {
                     liftTarget = Lift.LiftPos.MID;
+
+                }
+                else if (gamepad2.dpad_right) {
+                    liftTarget = Lift.LiftPos.MIDHIGH;
+
+                }
+                else if (gamepad2.dpad_up) {
+                    liftTarget = Lift.LiftPos.HIGH;
                 }
                 if (gamepad2.cross) {
                     liftTarget = Lift.LiftPos.START;
                 }
 
-
-
-                    //elbow
+//                if (gamepad1.dpad_down) {//intake
+//                    robot.ldrop.setPosition(.179);
+//                    robot.rdrop.setPosition(.219);
+//                }
+//                if (gamepad1.dpad_up) { //away
+//
+//                    //lDropPos = robot.ldrop.getPosition() -.05;
+//                   // rDropPos = robot.ldrop.getPosition() +.05;
+//                    robot.ldrop.setPosition(0.2115);
+//                    robot.rdrop.setPosition(.176);
+//
+//                }
+//                if (gamepad1.dpad_left) {//stack
+//                   // double change = 0;
+////                    lDropPos = robot.ldrop.getPosition() -.01;
+////                     rDropPos = robot.ldrop.getPosition() +.01;
+//                    robot.ldrop.setPosition(.19);
+//                    robot.rdrop.setPosition(.195);
+//
+//                }
+//                if (gamepad1.dpad_right) {//stack
+//                    robot.ldrop.setPosition(.185);
+//                    robot.rdrop.setPosition(.20);
+//                }
+////
+//
+//                    //elbow
 //                if(gamepad2.circle){ //outake pos
 //                    robot.raxon.setPosition(.1);
 //                    robot.laxon.setPosition(.9);

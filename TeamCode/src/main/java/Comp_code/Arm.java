@@ -32,8 +32,8 @@ public class Arm {
 
     public void goToScoringPos(){
        wrist.setPosition(.001);
-       raxon.setPosition(.09);
-       laxon.setPosition(.91);
+       raxon.setPosition(.11);
+       laxon.setPosition(.89);
     }
 
     public void deposit(double sec){
@@ -47,9 +47,9 @@ public class Arm {
     }
 
     public void intakePos(){
-        wrist.setPosition(.95);
-        raxon.setPosition(.88);
-        laxon.setPosition(.12);
+        wrist.setPosition(.999);
+        raxon.setPosition(.785);
+        laxon.setPosition(.225);
     }
     public void wheelIntake(double sec){
         ElapsedTime runtime = new ElapsedTime();
