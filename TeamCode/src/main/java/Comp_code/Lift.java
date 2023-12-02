@@ -23,18 +23,24 @@ public class Lift {
         MID,
         MIDHIGH,
         LOW_AUTO,
-        HIGH
+        HIGH,
+        MANUAL
     }
-    public static int START_POS = 0;
-    public static int LOW_POS = 1550;
-    public static int MID_POS = 2150;
-    public static int MID_HIGH_POS = 2550;
-    public static int HIGH_POS = 3100;
-    public static int LOW_AUTO = 1450;
-
-    private MultipleTelemetry tl;
     public DcMotorEx larm;
     public DcMotorEx rarm;
+    public static int START_POS = 0;
+    public static int LOW_POS = 1550;
+    public static int MID_POS = 1900;
+    public static int MID_HIGH_POS = 2550;
+
+    public static int HIGH_POS = 3100;
+    public static int LOW_AUTO = 1500;
+
+
+//    int MANUAL = larm.getCurrentPosition() +20;
+
+    private MultipleTelemetry tl;
+
 
     public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
         // Beep boop this is the the constructor for the lift
@@ -103,6 +109,7 @@ public class Lift {
         // Beep boop this is the lift update function
         // Assume this runs some PID controller for the lift
         switch (target){
+            //int MANUAL = larm.getCurrentPosition() +20;
 
             case START:
                 encoderTarget = START_POS;
@@ -123,6 +130,9 @@ public class Lift {
 
             case LOW_AUTO:
                 encoderTarget = LOW_AUTO;
+                break;
+            case MANUAL:
+                encoderTarget = larm.getCurrentPosition() + 20;
                 break;
         }
 

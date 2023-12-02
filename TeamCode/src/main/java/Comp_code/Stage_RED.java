@@ -76,7 +76,7 @@ public class Stage_RED extends LinearOpMode {
 
 
         Trajectory right = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(-31.91, -41.77), Math.toRadians(40.00))
+                .splineTo(new Vector2d(-31.25, -41.77), Math.toRadians(40.00))
                 .build();
 
 
@@ -89,14 +89,14 @@ public class Stage_RED extends LinearOpMode {
                 .build();
 
         Trajectory left_stage = drive.trajectoryBuilder(strafe_left.end())
-                .splineTo(new Vector2d(-24.76, -17.86), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-24.76, -15.86), Math.toRadians(0.00))
                 .build();
         Trajectory left_straight = drive.trajectoryBuilder(left_stage.end())
                 .forward(47)
                 .build();
 
         Trajectory left_drop = drive.trajectoryBuilder(left_straight.end())
-                .splineTo(new Vector2d(41.24, -35), Math.toRadians(0.00))
+                .splineTo(new Vector2d(41.24, -34), Math.toRadians(0.00))
                 .build();
         Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
                 .forward(5.9)
@@ -114,7 +114,7 @@ public class Stage_RED extends LinearOpMode {
 
 
         Trajectory right_stage = drive.trajectoryBuilder(backup_right.end())
-                .splineTo(new Vector2d(-24.76, -17.86), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-24.76, -15.86), Math.toRadians(0.00))
                 .build();
         Trajectory right_straight = drive.trajectoryBuilder(right_stage.end())
                 .forward(47)

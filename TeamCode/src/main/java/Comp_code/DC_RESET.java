@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package Comp_code.Comp_code;
+package Comp_code;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -51,10 +51,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 //start position thingy Ltarget = 440 , Rtarget = 439
 
-@TeleOp(name="VOLTAGE BACKUP", group="tests")
+@TeleOp(name="VOLTAGE BACKUP")
 
 public class DC_RESET extends LinearOpMode {
-
+    bot_map robot = new bot_map();
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     ;
@@ -70,10 +70,14 @@ public class DC_RESET extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-
+        robot.init(hardwareMap);
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
+        robot.wrist.setPosition(0.999);
+
+        robot.raxon.setPosition(.87);
+        robot.laxon.setPosition(.12);
 
         larm = hardwareMap.get(DcMotor.class,"Llift");
         rarm = hardwareMap.get(DcMotor.class,"Rlift");

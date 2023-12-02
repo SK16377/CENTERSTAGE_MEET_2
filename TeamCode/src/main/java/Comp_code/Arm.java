@@ -55,7 +55,7 @@ public class Arm {
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
         while(runtime.seconds() <= sec){
-            wheel.setPosition(.9);
+            wheel.setPosition(.99);
         }
         wheel.setPosition(.5);
         runtime.reset();

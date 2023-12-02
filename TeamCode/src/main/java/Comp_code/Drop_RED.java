@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -35,6 +36,7 @@ public class Drop_RED extends LinearOpMode {
         RED_LEFT,
         RED_RIGHT
     }
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -70,7 +72,7 @@ public class Drop_RED extends LinearOpMode {
                 .build();
 
         Trajectory middle = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(13.22, -40.7), Math.toRadians(90.00))
+                .splineTo(new Vector2d(13.3, -39.5), Math.toRadians(90.00))
                 .build();
 
         Trajectory left = drive.trajectoryBuilder(startPose)
@@ -85,7 +87,7 @@ public class Drop_RED extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(44.24, -39.75, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
-                .forward(5.5)
+                .forward(6.2)
                 .build();
         Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
                 .back(5)
@@ -94,14 +96,14 @@ public class Drop_RED extends LinearOpMode {
                 .strafeRight(24)
                 .build();
         Trajectory backup_right = drive.trajectoryBuilder(right.end())
-                .back(3)
+                .back(3.6)
                 .build();
 
         Trajectory right_drop = drive.trajectoryBuilder(backup_right.end())
-                .lineToLinearHeading(new Pose2d(44.24, -44.09, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(44.24, -44.45, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_right = drive.trajectoryBuilder(right_drop.end())
-                .forward(5.3)
+                .forward(5.4)
                 .build();
         Trajectory away_right = drive.trajectoryBuilder(deposit_right.end())
                 .back(5)
@@ -114,11 +116,11 @@ public class Drop_RED extends LinearOpMode {
                 .back(5)
                 .build();
         Trajectory left_drop = drive.trajectoryBuilder(backup_left.end())
-                .lineToLinearHeading(new Pose2d(44.24, -32.09, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(44.24, -31.2, Math.toRadians(0.00)))
                 .build();
 
         Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
-                .forward(5)
+                .forward(6)
                 .build();
         Trajectory away_left = drive.trajectoryBuilder(deposit_left.end())
                 .back(5)
@@ -162,12 +164,12 @@ public class Drop_RED extends LinearOpMode {
     public void scoreLow(Trajectory backdrop, Trajectory away){
 
 
-
         arm.goToScoringPos();
         lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
 
         drive.followTrajectory(backdrop);
-        arm.deposit(.6);
+        arm.deposit(.65);
+        sleep(200);
         drive.followTrajectory(away);
         arm.intakePos();
         lift.moveToTarget(Lift.LiftPos.START);

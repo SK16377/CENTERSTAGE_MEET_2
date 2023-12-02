@@ -121,17 +121,17 @@ public class Stage_BLUE extends LinearOpMode {
                 .forward(49)
                 .build();
         Trajectory left_drop = drive.trajectoryBuilder(left_straight.end())
-                .splineTo(new Vector2d(37.7, 46), Math.toRadians(0.00))
+                .splineTo(new Vector2d(36.7, 46), Math.toRadians(0.00))
                 .build();
         Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
-                .forward(5.9)
+                .forward(6.1)
                 .build();
         Trajectory away_left = drive.trajectoryBuilder(deposit_left.end())
-                .back(5.8)
+                .back(5.9)
                 .build();
 
         Trajectory left_park = drive.trajectoryBuilder(away_left.end())
-                .strafeRight(18)
+                .strafeRight(22)
                 .build();
         Trajectory backup_middle = drive.trajectoryBuilder(middle.end())
                 .back(2)
@@ -143,10 +143,10 @@ public class Stage_BLUE extends LinearOpMode {
                 .splineTo(new Vector2d(-42.88, 16), Math.toRadians(0.00))
                 .build();
         Trajectory straight_middle = drive.trajectoryBuilder(stage_middle.end())
-                .forward(57)
+                .forward(58)
                 .build();
         Trajectory drop_middle = drive.trajectoryBuilder(straight_middle.end())
-                .splineTo(new Vector2d(39, 42.2), Math.toRadians(0.00))
+                .splineTo(new Vector2d(39, 39), Math.toRadians(0.00))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
                 .forward(5.8)
@@ -155,7 +155,7 @@ public class Stage_BLUE extends LinearOpMode {
                 .back(5.5)
                 .build();
         Trajectory middle_after = drive.trajectoryBuilder(away_middle.end())
-                .strafeRight(18)
+                .strafeRight(23)
                 .build();
 //        Trajectory middle_park = drive.trajectoryBuilder(middle_after.end())
 //                .forward(7.7)

@@ -16,6 +16,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.controller.PIDController;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 //import Comp_code.bot_map;
 
 //import Testing.teleptest;
@@ -39,9 +41,44 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
         // public static int HIGH = 500; //2900 = HIGH
 //        public ElapsedTime runtime = new ElapsedTime();
+        public PIDController controller;
+        public static double p = 0.005, i = 0, d = 0.0; // d = dampener (dampens arm movement and is scary). ignore i
+        public static double f = 0.0007;  // prevents arm from falling from gravity
+
+
+
+        public enum LiftPos{
+            START,
+            LOW,
+            MID,
+            MIDHIGH,
+            LOW_AUTO,
+            HIGH,
+            MANUAL
+        }
+        public DcMotorEx larm;
+        public DcMotorEx rarm;
+        public static int START_POS = 0;
+        public static int LOW_POS = 1550;
+        public static int MID_POS = 1900;
+        public static int MID_HIGH_POS = 2550;
+
+        public static int HIGH_POS = 3100;
+        public static int LOW_AUTO = 1450;
+        public static int liftTarget = 0; // target position
+
+//    int MANUAL = larm.getCurrentPosition() +20;
+
+        private MultipleTelemetry tl;
+
+
+
+//    int MANUAL = larm.getCurrentPosition() +20;
+
+        //private MultipleTelemetry tl;
         double waitTime1 = .5;
         double waitTime2 = .5;
-        double waitTime3 = .5;
+        double waitTime3 = .75;
 
 
         ElapsedTime waitTimer1 = new ElapsedTime();
@@ -49,8 +86,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
         ElapsedTime waitTimer3 = new ElapsedTime();
         ElapsedTime runtime = new ElapsedTime();
 
-        public DcMotorEx larm;
-        public DcMotorEx rarm;
+
 
         double SpeedAdjust = 1;
 
@@ -62,7 +98,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
         enum elbowDownState { //INTAKE
             START,
             INTAKE,
-
+            WRIST
 
         }
         enum elbowUpState { //OUTTAKE
@@ -81,6 +117,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
             robot.raxon.setPosition(.87);
             robot.laxon.setPosition(.12);
+            robot.drone.setPosition(.5);
 //            robot.ldrop.setPosition(0.214);
 //            robot.rdrop.setPosition(0.175);
 
@@ -91,8 +128,8 @@ import com.arcrobotics.ftclib.controller.PIDController;
             elbowUpState outtake = elbowUpState.START;
             elbowDownState intake = elbowDownState.START;
 
-            Lift.LiftPos liftTarget = Lift.LiftPos.START;
-
+            //LiftPos liftTarget = LiftPos.START;
+            liftTarget = 0;
             while (opModeIsActive() && !isStopRequested()) {
 
                 switch (outtake) {
@@ -126,9 +163,18 @@ import com.arcrobotics.ftclib.controller.PIDController;
                         break;
                     case INTAKE:
                         if(waitTimer2.seconds() >= waitTime2) {
-                            robot.wrist.setPosition(.999);
                             robot.raxon.setPosition(.79);
                             robot.laxon.setPosition(.21);
+                            robot.wrist.setPosition(.8);
+
+                            waitTimer3.reset();
+                            intake = elbowDownState.WRIST;
+                        }
+                        break;
+                    case WRIST:
+                        if(waitTimer3.seconds() >= waitTime3) {
+
+                            robot.wrist.setPosition(.999);
 
                             intake = elbowDownState.START;
                         }
@@ -150,10 +196,10 @@ import com.arcrobotics.ftclib.controller.PIDController;
                     //robot.wheel.setPower(0);
                     robot.wheel.setPosition(.5);
                 }
-                if(gamepad1.circle){
+                if(gamepad1.cross){
                     runtime.reset();
-                    while(runtime.seconds() <= .7){
-                        robot.wheel.setPosition(.1);
+                    while(runtime.seconds() <= .45){
+                        robot.wheel.setPosition(.3);
                     }
                     robot.wheel.setPosition(.5);
                     runtime.reset();
@@ -182,10 +228,10 @@ import com.arcrobotics.ftclib.controller.PIDController;
                 if (gamepad1.square) {
 
                 }
-                else if (gamepad1.cross) {
+                else if (gamepad1.circle) {
                     runtime.reset();
-                    while(runtime.seconds() <= 1.55){
-                        robot.wheel.setPosition(.1);
+                    while(runtime.seconds() <= .7){
+                        robot.wheel.setPosition(.3);
                     }
                     robot.wheel.setPosition(.5);
                     runtime.reset();
@@ -193,23 +239,26 @@ import com.arcrobotics.ftclib.controller.PIDController;
                 //lift
                 if (gamepad2.dpad_down) {
 
-                    liftTarget = Lift.LiftPos.LOW;
+                    liftTarget = LOW_POS;
                 }
 
                 else if (gamepad2.dpad_left) {
-                    liftTarget = Lift.LiftPos.MID;
+                    liftTarget = MID_POS;
 
                 }
                 else if (gamepad2.dpad_right) {
-                    liftTarget = Lift.LiftPos.MIDHIGH;
+                    liftTarget = MID_HIGH_POS;
 
                 }
                 else if (gamepad2.dpad_up) {
-                    liftTarget = Lift.LiftPos.HIGH;
+                    liftTarget = HIGH_POS;
                 }
                 if (gamepad2.cross) {
-                    liftTarget = Lift.LiftPos.START;
+                    liftTarget = START_POS;
                 }
+//                else if (gamepad2.circle) {
+//                    liftTarget = Lift.LiftPos.MANUAL;
+//                }
 
 //                if (gamepad1.dpad_down) {//intake
 //                    robot.ldrop.setPosition(.179);
@@ -266,12 +315,32 @@ import com.arcrobotics.ftclib.controller.PIDController;
 
                 //drone
 
-                    if (gamepad2.circle) {
-                        robot.drone.setPosition(.3);
+//                    if (gamepad2.triangle) {
+//                        robot.drone.setPosition(.8);
+//                    }
+
+
+                    if(gamepad2.left_bumper && gamepad2.right_bumper) {
+                        robot.drone.setPosition(.8);
                     }
 
+                    else if (gamepad2.circle) {
+                        liftTarget = larm.getCurrentPosition() + 20;
+                    }
+//                     if(!gamepad2.circle){
+//                         lift.larm.setPower(0.0007);
+//                         lift.rarm.setPower(-0.0007);
+//                     }
+//                    } else if (gamepad2.circle){
+                     //   double lpwr = .5;
+//                        lift.larm.setPower(lpwr);
+                          //lift.larm.setPower(0);
+//                    }
 
-                lift.update(liftTarget);
+
+
+
+                lift.update();
                 telemetry.update();
                 robot.wheel.setPosition(servospeed);
             }
@@ -279,7 +348,104 @@ import com.arcrobotics.ftclib.controller.PIDController;
         //}
 
         //}
+        class Lift {
+            public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
+                // Beep boop this is the the constructor for the lift
+                // Assume this sets up the lift hardware
+
+                controller = new PIDController(p, i, d);
+                tl = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+                larm = hardwareMap.get(DcMotorEx.class, "Llift");
+                rarm = hardwareMap.get(DcMotorEx.class, "Rlift");
 
 
+                larm.setDirection(DcMotorEx.Direction.FORWARD);
+                rarm.setDirection(DcMotorEx.Direction.REVERSE);
 
+                larm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rarm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                larm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rarm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+
+            public void update() {
+//                setTarget(target);
+                // Beep boop this is the lift update function
+                // Assume this runs some PID controller for the lift
+
+
+                controller.setPID(p, i, d);
+
+                int larmPos = larm.getCurrentPosition();
+                int rarmPos = rarm.getCurrentPosition();
+
+                double Lpid = controller.calculate(larmPos, liftTarget);
+                double Rpid = controller.calculate(rarmPos, liftTarget);
+
+                // double Lff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; //* (12/voltageSensor.getVoltage()
+                // double Rff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; // * (12/voltageSensor.getVoltage()
+
+                double Lpower = Lpid + f;
+                double Rpower = Rpid + f;
+
+                larm.setPower(Lpower);
+                rarm.setPower(Rpower);
+
+
+                tl.update();
+            }
+
+            public boolean atTarget() {
+                return controller.atSetPoint();
+            }
+
+//            public void moveToTarget(LiftPos target) {
+//
+//                setTarget(target);
+//
+//                while (!atTarget()) {
+//                    update(target);
+//
+//                }
+//            }
+
+//            public void setTarget(LiftPos target) {
+//                int encoderTarget = 0;
+//                // Beep boop this is the lift update function
+//                // Assume this runs some PID controller for the lift
+//                switch (target) {
+//                    //int MANUAL = larm.getCurrentPosition() +20;
+//
+//                    case START:
+//                        encoderTarget = START_POS;
+//                        break;
+//                    case LOW:
+//                        encoderTarget = LOW_POS;
+//                        break;
+//
+//                    case MID:
+//                        encoderTarget = MID_POS;
+//                        break;
+//                    case MIDHIGH:
+//                        encoderTarget = MID_HIGH_POS;
+//                        break;
+//                    case HIGH:
+//                        encoderTarget = HIGH_POS;
+//                        break;
+//
+//                    case LOW_AUTO:
+//                        encoderTarget = LOW_AUTO;
+//                        break;
+//                    case MANUAL:
+//                        encoderTarget = larm.getCurrentPosition() + 20;
+//                        break;
+//                }
+
+//                controller.setSetPoint(encoderTarget);
+//            }
+
+        }
     }
+

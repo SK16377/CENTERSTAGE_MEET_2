@@ -83,10 +83,10 @@ public class Drop_BLUE extends LinearOpMode {
                 .back(2)
                 .build();
         Trajectory drop_middle = drive.trajectoryBuilder(backup_middle.end())
-                .lineToLinearHeading(new Pose2d(44.24, 37.75, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(44.24, 36.75, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
-                .forward(6)
+                .forward(6.5)
                 .build();
         Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
                 .back(4.5)
@@ -102,7 +102,7 @@ public class Drop_BLUE extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(43.24, 44.09, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_left = drive.trajectoryBuilder(left_drop.end())
-                .forward(5.2)
+                .forward(5.7)
                 .build();
         Trajectory away_left = drive.trajectoryBuilder(deposit_left.end())
                 .back(4.5)
@@ -115,11 +115,11 @@ public class Drop_BLUE extends LinearOpMode {
                 .back(5)
                 .build();
         Trajectory right_drop = drive.trajectoryBuilder(backup_left.end())
-                .lineToLinearHeading(new Pose2d(44.24, 32.09, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(44.24, 31, Math.toRadians(0.00)))
                 .build();
 
         Trajectory deposit_right = drive.trajectoryBuilder(right_drop.end())
-                .forward(6.3)
+                .forward(7.3)
                 .build();
         Trajectory away_right = drive.trajectoryBuilder(deposit_right.end())
                 .back(2.5)
