@@ -168,7 +168,7 @@ public class Drop_RED extends LinearOpMode {
         lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
 
         drive.followTrajectory(backdrop);
-        arm.deposit(.65);
+        arm.deposit(1);
         sleep(200);
         drive.followTrajectory(away);
         arm.intakePos();

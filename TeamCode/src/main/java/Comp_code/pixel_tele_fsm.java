@@ -59,12 +59,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
         public DcMotorEx larm;
         public DcMotorEx rarm;
         public static int START_POS = 0;
-        public static int LOW_POS = 1550;
-        public static int MID_POS = 1900;
-        public static int MID_HIGH_POS = 2550;
-
-        public static int HIGH_POS = 3100;
-        public static int LOW_AUTO = 1450;
+        public static int LOW_POS = 1030;
+        public static int MID_POS = 1460;
+        public static int MID_HIGH_POS = 1750;
+//max 2320
+        public static int HIGH_POS = 2250;
+        public static int LOW_AUTO = 900;
         public static int liftTarget = 0; // target position
 
 //    int MANUAL = larm.getCurrentPosition() +20;
@@ -77,9 +77,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
         //private MultipleTelemetry tl;
         double waitTime1 = .5;
-        double waitTime2 = .5;
-        double waitTime3 = .75;
-
+        double waitTime2 = 0;
+        double waitTime3 = 1.05;
 
         ElapsedTime waitTimer1 = new ElapsedTime();
         ElapsedTime waitTimer2 = new ElapsedTime();
@@ -198,8 +197,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 }
                 if(gamepad1.cross){
                     runtime.reset();
-                    while(runtime.seconds() <= .45){
-                        robot.wheel.setPosition(.3);
+                    while(runtime.seconds() <= .36){
+                        robot.wheel.setPosition(.32);
                     }
                     robot.wheel.setPosition(.5);
                     runtime.reset();

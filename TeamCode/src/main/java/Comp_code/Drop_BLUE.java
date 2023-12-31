@@ -83,7 +83,7 @@ public class Drop_BLUE extends LinearOpMode {
                 .back(2)
                 .build();
         Trajectory drop_middle = drive.trajectoryBuilder(backup_middle.end())
-                .lineToLinearHeading(new Pose2d(44.24, 36.75, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(44.7, 36.75, Math.toRadians(0.00)))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
                 .forward(6.5)
@@ -171,7 +171,7 @@ public class Drop_BLUE extends LinearOpMode {
         lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
 
         drive.followTrajectory(backdrop);
-        arm.deposit(.6);
+        arm.deposit(1);
         drive.followTrajectory(away);
         arm.intakePos();
         lift.moveToTarget(Lift.LiftPos.START);

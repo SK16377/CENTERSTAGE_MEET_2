@@ -215,7 +215,7 @@ public class Stage_BLUE extends LinearOpMode {
         lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
 
         drive.followTrajectory(backdrop);
-        arm.deposit(.6);
+        arm.deposit(1);
         drive.followTrajectory(away);
         arm.intakePos();
         lift.moveToTarget(Lift.LiftPos.START);
