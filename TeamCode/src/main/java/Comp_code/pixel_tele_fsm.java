@@ -326,6 +326,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     else if (gamepad2.circle) {
                         liftTarget = larm.getCurrentPosition() + 20;
                     }
+                    else if (gamepad2.square) {
+                        liftTarget = larm.getCurrentPosition() - 20;
+                    }
+                int drone_target = 0;
+
+                    if (gamepad2.triangle) {
+                        drone_target = 20;
+                        robot.climb.setPower(1);
+                        robot.climb.setTargetPosition(drone_target);
+                    }
 //                     if(!gamepad2.circle){
 //                         lift.larm.setPower(0.0007);
 //                         lift.rarm.setPower(-0.0007);
@@ -340,8 +350,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
                 lift.update();
+                //robot.climb.setPower(1);
+                robot.climb.setTargetPosition(drone_target);
+
                 telemetry.update();
                 robot.wheel.setPosition(servospeed);
+
+
             }
         }
         //}

@@ -146,13 +146,13 @@ public class Stage_BLUE extends LinearOpMode {
                 .forward(58)
                 .build();
         Trajectory drop_middle = drive.trajectoryBuilder(straight_middle.end())
-                .splineTo(new Vector2d(39, 39), Math.toRadians(0.00))
+                .splineTo(new Vector2d(39, 39.3), Math.toRadians(0.00))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
                 .forward(5.8)
                 .build();
         Trajectory away_middle = drive.trajectoryBuilder(deposit_middle.end())
-                .back(5.5)
+                .back(5.7)
                 .build();
         Trajectory middle_after = drive.trajectoryBuilder(away_middle.end())
                 .strafeRight(23)
