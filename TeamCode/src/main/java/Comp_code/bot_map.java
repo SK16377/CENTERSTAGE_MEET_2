@@ -33,6 +33,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -123,7 +124,7 @@ public class bot_map
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
-        climb.setDirection(DcMotor.Direction.FORWARD);
+        climb.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.FORWARD);
 //
 
@@ -146,7 +147,8 @@ public class bot_map
 //        lin.setPower(0);
 //        rin.setPower(0);
 
-
+        climb.setTargetPosition(0);
+        climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -158,7 +160,7 @@ public class bot_map
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        lin.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        rin.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        climb.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         // Define and initialize ALL installed servos.
 
 

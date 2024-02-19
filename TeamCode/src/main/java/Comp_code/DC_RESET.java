@@ -29,6 +29,7 @@
 
 package Comp_code;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -50,7 +51,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 //start position thingy Ltarget = 440 , Rtarget = 439
-
+@Disabled
 @TeleOp(name="VOLTAGE BACKUP")
 
 public class DC_RESET extends LinearOpMode {

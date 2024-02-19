@@ -169,6 +169,7 @@ public class Stage_RED extends LinearOpMode {
                 drive.followTrajectory(left);
                 drive.followTrajectory(backup_left);
                 drive.followTrajectory(strafe_left);
+                sleep(10000);
                 drive.followTrajectory(left_stage);
                 drive.followTrajectory(left_straight);
                 drive.followTrajectory(left_drop);
@@ -180,7 +181,7 @@ public class Stage_RED extends LinearOpMode {
             case NOT_FOUND: //right
                 drive.followTrajectory(right);
                 drive.followTrajectory(backup_right);
-
+                sleep(10000);
                 drive.followTrajectory(right_stage);
                 drive.followTrajectory(right_straight);
                 drive.followTrajectory(right_drop);
@@ -192,6 +193,7 @@ public class Stage_RED extends LinearOpMode {
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
                 drive.followTrajectory(strafe_middle);
+                sleep(10000);
                 drive.followTrajectory(stage_middle);
                 drive.followTrajectory(straight_middle);
                 drive.followTrajectory(drop_middle);

@@ -32,8 +32,8 @@ public class redAudiencePipeline extends OpenCvPipeline {
             new Point(30, 80),
             new Point(100, 160));
     static final Rect RIGHT_ROI = new Rect(
-            new Point(170, 85),
-            new Point(260, 150));
+            new Point(155, 90),
+            new Point(212, 140));
     static double PERCENT_COLOR_THRESHOLD = 0.2;
 
     public redAudiencePipeline(Telemetry t) { telemetry = t; }

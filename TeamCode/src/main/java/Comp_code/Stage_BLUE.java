@@ -146,7 +146,7 @@ public class Stage_BLUE extends LinearOpMode {
                 .forward(58)
                 .build();
         Trajectory drop_middle = drive.trajectoryBuilder(straight_middle.end())
-                .splineTo(new Vector2d(39, 39.3), Math.toRadians(0.00))
+                .splineTo(new Vector2d(39, 38.25), Math.toRadians(0.00))
                 .build();
         Trajectory deposit_middle = drive.trajectoryBuilder(drop_middle.end())
                 .forward(5.8)
@@ -170,6 +170,7 @@ public class Stage_BLUE extends LinearOpMode {
                 drive.followTrajectory(middle);
                 drive.followTrajectory(backup_middle);
                 drive.followTrajectory(strafe_middle);
+                sleep(5000);
                 drive.followTrajectory(stage_middle);
                 drive.followTrajectory(straight_middle);
                 drive.followTrajectory(drop_middle);
@@ -182,6 +183,7 @@ public class Stage_BLUE extends LinearOpMode {
                 // drive.followTrajectory(right_park);
                 drive.followTrajectory(left);
                 drive.followTrajectory(backup_left);
+                sleep(5000);
                 drive.followTrajectory(left_stage);
                 drive.followTrajectory(left_straight);
                 drive.followTrajectory(left_drop);
@@ -192,6 +194,7 @@ public class Stage_BLUE extends LinearOpMode {
                 drive.followTrajectory(right);
                 drive.followTrajectory(backup_right);
                 drive.followTrajectory(strafe_right);
+                sleep(5000);
                 drive.followTrajectory(right_stage);
                 drive.followTrajectory(right_straight);
                 drive.followTrajectory(right_drop);
