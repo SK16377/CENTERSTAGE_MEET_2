@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -34,7 +35,7 @@ import opencv.CenterstageProcessor;
 
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
-
+@Disabled
 @Autonomous(name="APRIL_BLUE_BACK", group="Auto")
 public class TestAprilTagDrop_BLUE extends LinearOpMode {
     SampleMecanumDrive drive;

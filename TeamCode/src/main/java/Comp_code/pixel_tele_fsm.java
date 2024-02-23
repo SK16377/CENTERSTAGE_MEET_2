@@ -228,7 +228,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //                    robot.climb.setTargetPosition(400);
 //
 //                }
-                if (gamepad2.triangle) { //drone
+                if (gamepad2.left_bumper) { //drone
                    drone_target = 2500; //bottom
                 }
 //                else if (gamepad2.dpad_up) {
@@ -241,6 +241,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                if (gamepad2.left_trigger >0) {
 
                     drone_target = robot.climb.getCurrentPosition() + 150;
+                }
+                if (gamepad2.square) {
+                    drone_target = 5725;
                 }
 //
                 if (gamepad1.square) {
@@ -342,10 +345,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                         robot.drone.setPosition(.8);
                     }
 
-                    else if (gamepad2.circle) {
+                    else if (gamepad2.triangle) {
                         liftTarget = larm.getCurrentPosition() + 20;
                     }
-                    else if (gamepad2.square) {
+                    else if (gamepad2.circle) {
                         liftTarget = larm.getCurrentPosition() - 20;
                     }
               //  int drone_target = 0;
@@ -402,7 +405,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
             public void update() {
 //                setTarget(target);
-                // Beep boop this is the lift update function
+
                 // Assume this runs some PID controller for the lift
 
 
@@ -414,8 +417,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 double Lpid = controller.calculate(larmPos, liftTarget);
                 double Rpid = controller.calculate(rarmPos, liftTarget);
 
-                // double Lff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; //* (12/voltageSensor.getVoltage()
-                // double Rff = Math.cos(Math.toRadians(LiftTarget / ticks_in_degree)) * f; // * (12/voltageSensor.getVoltage()
 
                 double Lpower = Lpid + f;
                 double Rpower = Rpid + f;

@@ -48,8 +48,12 @@ public class Arm {
 
     public void intakePos(){
         wrist.setPosition(.999);
-        raxon.setPosition(.785);
-        laxon.setPosition(.225);
+
+    }
+    public void autonparkpos(){
+        raxon.setPosition(.79);
+        laxon.setPosition(.21);
+        wrist.setPosition(.8);
     }
     public void wheelIntake(double sec){
         ElapsedTime runtime = new ElapsedTime();
