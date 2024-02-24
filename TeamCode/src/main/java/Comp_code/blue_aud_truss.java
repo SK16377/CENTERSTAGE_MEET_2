@@ -116,7 +116,7 @@ public class blue_aud_truss extends LinearOpMode {
                 .forward(55)
                 .build();
         Trajectory rightat_back = drive.trajectoryBuilder(right_undertruss.end())
-                .lineToLinearHeading(new Pose2d(39.25, 27.35, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(39.25, 28.45, Math.toRadians(0.00)))
                 .build();
 //44 middle
 
@@ -136,7 +136,7 @@ public class blue_aud_truss extends LinearOpMode {
                 .back(4)
                 .build();
         Trajectory middle_truss = drive.trajectoryBuilder(backup_middle.end())
-                .lineToLinearHeading(new Pose2d(-42.5, 63.45, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(-42.5, 62.55, Math.toRadians(0.00)))
                 .build();
 
         Trajectory middle_undertruss = drive.trajectoryBuilder(middle_truss.end())
@@ -172,7 +172,6 @@ public class blue_aud_truss extends LinearOpMode {
                 drive.followTrajectory(middle_undertruss);
                 drive.followTrajectory(middleat_back);
                 scoreLow(middle_deposit, away_middle, middle_park);
-                drive.followTrajectory(middle_park);
 
 
                 break;
@@ -184,7 +183,7 @@ public class blue_aud_truss extends LinearOpMode {
                 drive.followTrajectory(left_undertruss);
                 drive.followTrajectory(leftat_back);
                 scoreLow(deposit_left, away_left, left_park);
-                drive.followTrajectory(left_park);
+
 //
                 break;
             case RIGHT: //right
@@ -196,7 +195,7 @@ public class blue_aud_truss extends LinearOpMode {
                 drive.followTrajectory(right_undertruss);
                 drive.followTrajectory(rightat_back);
                 scoreLow(right_deposit, away_right, right_park);
-                drive.followTrajectory(right_park);
+
                 break;
 
         }
@@ -216,9 +215,9 @@ public class blue_aud_truss extends LinearOpMode {
         drive.followTrajectory(backdrop);
         arm.deposit(1);
         drive.followTrajectory(away);
-
-        drive.followTrajectory(park);
         arm.autonparkpos();
+        drive.followTrajectory(park);
+
         lift.moveToTarget(Lift.LiftPos.START);
         arm.intakePos();
 

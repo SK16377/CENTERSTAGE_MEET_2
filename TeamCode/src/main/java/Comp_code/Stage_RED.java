@@ -24,7 +24,7 @@ import opencv.redAudiencePipeline;
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
 
-@Autonomous(name="Red_STACK", group="Auto")
+@Autonomous(name="Red_under_stage", group="Auto")
 public class Stage_RED extends LinearOpMode {
     SampleMecanumDrive drive;
     OpenCvCamera webcam;
@@ -173,8 +173,8 @@ public class Stage_RED extends LinearOpMode {
                 drive.followTrajectory(left_stage);
                 drive.followTrajectory(left_straight);
                 drive.followTrajectory(left_drop);
-                scoreLow(deposit_left, away_left);
-                drive.followTrajectory(left_park);
+                scoreLow(deposit_left, away_left, left_park);
+
 
 
                 break;
@@ -185,8 +185,8 @@ public class Stage_RED extends LinearOpMode {
                 drive.followTrajectory(right_stage);
                 drive.followTrajectory(right_straight);
                 drive.followTrajectory(right_drop);
-                scoreLow(deposit_right, away_right);
-                drive.followTrajectory(after_right);
+                scoreLow(deposit_right, away_right, right_park);
+
                // drive.followTrajectory(right_park);
                 break;
             case RIGHT: //middle
@@ -197,8 +197,8 @@ public class Stage_RED extends LinearOpMode {
                 drive.followTrajectory(stage_middle);
                 drive.followTrajectory(straight_middle);
                 drive.followTrajectory(drop_middle);
-                scoreLow(deposit_middle, away_middle);
-                drive.followTrajectory(middle_after);
+                scoreLow(deposit_middle, away_middle, middle_park);
+
                // drive.followTrajectory(middle_park);
                 break;
 
@@ -209,7 +209,7 @@ public class Stage_RED extends LinearOpMode {
 
         webcam.stopStreaming();
     }
-    public void scoreLow(Trajectory backdrop, Trajectory away){
+    public void scoreLow(Trajectory backdrop, Trajectory away, Trajectory park){
 
 
 
@@ -219,8 +219,12 @@ public class Stage_RED extends LinearOpMode {
         drive.followTrajectory(backdrop);
         arm.deposit(1);
         drive.followTrajectory(away);
-        arm.intakePos();
+        arm.autonparkpos();
+        drive.followTrajectory(park);
+
         lift.moveToTarget(Lift.LiftPos.START);
+        arm.intakePos();
+
 
     }
 }

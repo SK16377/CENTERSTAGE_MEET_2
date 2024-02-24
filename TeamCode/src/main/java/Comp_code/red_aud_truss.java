@@ -63,7 +63,8 @@ public class red_aud_truss extends LinearOpMode {
         Pose2d startPose = new Pose2d(-40, -63.42, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
         Trajectory left = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(-46.35, -43.81), Math.toRadians(90))
+               // .splineTo(new Vector2d(-46.35, -43.81), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(-46.3, -43.81, Math.toRadians(90)))
                 .build();
 
         Trajectory middle = drive.trajectoryBuilder(startPose)
@@ -80,12 +81,12 @@ public class red_aud_truss extends LinearOpMode {
         Trajectory backup_left = drive.trajectoryBuilder(left.end())
                 .back(3)
                 .build();
-        Trajectory strafe_left = drive.trajectoryBuilder(backup_left.end())
-                .strafeRight(13)
-                .build();
+
         Trajectory left_truss = drive.trajectoryBuilder(backup_left.end())
-                .lineToLinearHeading(new Pose2d(-42.5, -60, Math.toRadians(0.00)))
+                .lineToSplineHeading(new Pose2d(-42.5, -60, Math.toRadians(0.00)))
+
                 .build();
+
         Trajectory left_strafe_ = drive.trajectoryBuilder(left_truss.end())
                 .strafeRight(8.85)
                 .build();
@@ -93,24 +94,26 @@ public class red_aud_truss extends LinearOpMode {
                 .forward(55)
                 .build();
         Trajectory leftat_back = drive.trajectoryBuilder(left_undertruss.end())
-                .lineToLinearHeading(new Pose2d(44, -29.5, Math.toRadians(0.00)))
+              // .lineToLinearHeading(new Pose2d(44, -31.45, Math.toRadians(0.00)))
+              //  .splineTo(new Vector2d(43, -28, Math.toRadians(0.00)))
+                .splineTo(new Vector2d(42.35, -31.3), Math.toRadians(0.00))
                 .build();
 
 
         Trajectory deposit_left = drive.trajectoryBuilder(leftat_back.end())
-                .forward(4.479)
+                .forward(4.61)
                 .build();
         Trajectory away_left = drive.trajectoryBuilder(deposit_left.end())
                 .back(4.5)
                 .build();
         Trajectory left_park = drive.trajectoryBuilder(away_left.end())
-                .strafeRight(32.5)
+                .strafeRight(30.5)
                 .build();
         Trajectory backup_right = drive.trajectoryBuilder(right.end())
                 .back(4)
                 .build();
         Trajectory right_truss = drive.trajectoryBuilder(backup_right.end())
-                .lineToLinearHeading(new Pose2d(-42.5, -64.5, Math.toRadians(0.00)))
+                .lineToLinearHeading(new Pose2d(-42.5, -63, Math.toRadians(0.00)))
                 .build();
 
         Trajectory right_undertruss = drive.trajectoryBuilder(right_truss.end())
@@ -128,7 +131,7 @@ public class red_aud_truss extends LinearOpMode {
                 .back(4.5)
                 .build();
         Trajectory right_park = drive.trajectoryBuilder(away_right.end())
-                .strafeRight(19.3)
+                .strafeRight(18)
                 .build();
 
 
@@ -158,7 +161,7 @@ public class red_aud_truss extends LinearOpMode {
                 .back(4.5)
                 .build();
         Trajectory middle_park = drive.trajectoryBuilder(away_middle.end())
-                .strafeRight(25)
+                .strafeRight(24)
                 .build();
         waitForStart();
         if (isStopRequested()) return;
@@ -222,13 +225,13 @@ public class red_aud_truss extends LinearOpMode {
 
         arm.goToScoringPos();
         lift.moveToTarget(Lift.LiftPos.LOW_AUTO);
-
+        sleep(250);
         drive.followTrajectory(backdrop);
         arm.deposit(1);
         drive.followTrajectory(away);
-
-        drive.followTrajectory(park);
         arm.autonparkpos();
+        drive.followTrajectory(park);
+
         lift.moveToTarget(Lift.LiftPos.START);
         arm.intakePos();
 

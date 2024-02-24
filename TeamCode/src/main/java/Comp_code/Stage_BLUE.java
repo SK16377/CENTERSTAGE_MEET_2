@@ -25,7 +25,7 @@ import opencv.redAudiencePipeline;
 //import com.acmerobotics.roadrunner.trajectoryBuilder;
 
 
-@Autonomous(name="Blue_STACK", group="Auto")
+@Autonomous(name="Blue_under_stage", group="Auto")
 public class Stage_BLUE extends LinearOpMode {
     SampleMecanumDrive drive;
     OpenCvCamera webcam;
@@ -174,8 +174,7 @@ public class Stage_BLUE extends LinearOpMode {
                 drive.followTrajectory(stage_middle);
                 drive.followTrajectory(straight_middle);
                 drive.followTrajectory(drop_middle);
-                scoreLow(deposit_middle, away_middle);
-                drive.followTrajectory(middle_after);
+                scoreLow(deposit_middle, away_middle, middle_after);
 
                 break;
             case NOT_FOUND: //left
@@ -187,8 +186,8 @@ public class Stage_BLUE extends LinearOpMode {
                 drive.followTrajectory(left_stage);
                 drive.followTrajectory(left_straight);
                 drive.followTrajectory(left_drop);
-                scoreLow(deposit_left, away_left);
-                drive.followTrajectory(left_park);
+                scoreLow(deposit_left, away_left, left_park);
+
                 break;
             case RIGHT: //right
                 drive.followTrajectory(right);
@@ -198,9 +197,8 @@ public class Stage_BLUE extends LinearOpMode {
                 drive.followTrajectory(right_stage);
                 drive.followTrajectory(right_straight);
                 drive.followTrajectory(right_drop);
-                scoreLow(deposit_right, away_right);
-                drive.followTrajectory(right_park);
-                // drive.followTrajectory(middle_park);
+                scoreLow(deposit_right, away_right, right_park);
+
                 break;
 
         }
@@ -210,7 +208,7 @@ public class Stage_BLUE extends LinearOpMode {
 
         webcam.stopStreaming();
     }
-    public void scoreLow(Trajectory backdrop, Trajectory away){
+    public void scoreLow(Trajectory backdrop, Trajectory away, Trajectory park){
 
 
 
@@ -220,8 +218,12 @@ public class Stage_BLUE extends LinearOpMode {
         drive.followTrajectory(backdrop);
         arm.deposit(1);
         drive.followTrajectory(away);
-        arm.intakePos();
+        arm.autonparkpos();
+        drive.followTrajectory(park);
+
         lift.moveToTarget(Lift.LiftPos.START);
+        arm.intakePos();
+
 
     }
 }
